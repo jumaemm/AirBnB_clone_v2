@@ -8,7 +8,7 @@ storage_type = environ.get("HBNB_TYPE_STORAGE")
 
 if (storage_type == "db"):
     storage = DBStorage()
-    storage = reload()
+    storage.reload()
 else:
     storage = FileStorage()
     storage.reload()
