@@ -35,6 +35,7 @@ class DBStorage:
             HBNB_MYSQL_PWD,
             HBNB_MYSQL_HOST,
             HBNB_MYSQL_DB), pool_pre_ping=True)
+
         env = getenv("HBNB_ENV")
         if (env == "test"):
             Base.metadata.drop_all(self.__engine)
@@ -77,6 +78,11 @@ class DBStorage:
         Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Scope = scoped_session(Session)
         self.__session = Scope()
+        """
+        Base.metadata.create_all(self.__engine)
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
+        self.__session = scoped_session(session_factory)()"""
 
     def close(self):
         """Close current session"""
