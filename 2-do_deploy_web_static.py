@@ -37,13 +37,11 @@ def do_deploy(archive_path):
     flag = False
 
     try:
-        print("Made it to try")
         put(archive_path, "/tmp/{}".format(file_name))
-        print("Put worked!")
         sudo("mkdir -p {}".format(folder_path))
         sudo("tar -xzf /tmp/{} -C {}".format(file_name, folder_path))
         sudo("rm -rf /tmp/{}".format(file_name))
-        sudo("mv {}web_static/* {}".format(folder_path, file_name))
+        sudo("mv {}web_static/* {}".format(folder_path, folder_path))
         sudo("rm -rf {}web_static".format(folder_path))
         sudo("rm -rf /data/web_static/current")
         sudo("ln -s {} /data/web_static/current".format(folder_path))
@@ -51,6 +49,5 @@ def do_deploy(archive_path):
         flag = True
 
     except Exception:
-        print("I am failing btw")
         flag = False
     return flag
