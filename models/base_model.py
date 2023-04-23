@@ -1,19 +1,26 @@
 #!/usr/bin/python3
 """This module defines a base class for all models in our hbnb clone"""
 import uuid
-import models
 from datetime import datetime
-from sqlalchemy import Column, String, DATETIME
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, String, DATETIME
+from models import storage_type
 
 Base = declarative_base()
 
 
 class BaseModel:
     """A base class for all hbnb models"""
-    id = Column(String(60), nullable=False, primary_key=True)
-    created_at = Column(DATETIME, nullable=False, default=datetime.utcnow())
-    updated_at = Column(DATETIME, nullable=False, default=datetime.utcnow())
+    id = Column(String(60),
+                nullable=False,
+                primary_key=True,
+                unique=True)
+    created_at = Column(DATETIME,
+                        nullable=False,
+                        default=datetime.utcnow())
+    updated_at = Column(DATETIME,
+                        nullable=False,
+                        default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """Instantiates a new model"""
@@ -36,23 +43,24 @@ class BaseModel:
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
+        from models import storage
         self.updated_at = datetime.now()
-        models.storage.new(self)
-        models.storage.save()
+        storage.new(self)
+        storage.save()
 
     def to_dict(self):
         """Convert instance into dict format"""
-        dict_copy = self.__dict__.copy()
-        dict_copy['__class__'] = self.__class__.__name__
-        for key in dict_copy:
-            if key in ("created_at", "updated_at"):
-                dict_copy[key] = dict_copy[key].isoformat()
-
-        if '__sa_instance_state' in dict_copy.keys():
-            del (dict_copy['_sa_instance_state'])
-
-        return dict_copy
+        dct = self.__dict__.copy()
+        dct['__class__'] = self.__class__.__name__
+        for k in dct:
+            if type(dct[k]) is datetime:
+                dct[k] = dct[k].isoformat()
+        if '_sa_instance_state' in dct.keys():
+            del(dct['_sa_instance_state'])
+        return dct
 
     def delete(self):
-        """Delete current instance from storage"""
-        models.storage.delete(self)
+        '''deletes the current instance from the storage'''
+        from models import storage
+        storage.delete(self)
+
