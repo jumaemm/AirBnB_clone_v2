@@ -76,6 +76,6 @@ class Place(BaseModel, Base):
         def amenities(self, obj):
             """Settter prop for amenities"""
             if obj is not None:
-                if isinstance(obj, models.amanity.Amenity):
+                if isinstance(obj, models.amenity.Amenity):
                     if obj.id not in self.amenity_ids:
                         self.amenity_ids.append(obj.id)
