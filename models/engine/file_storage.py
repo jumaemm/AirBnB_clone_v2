@@ -44,7 +44,7 @@ class FileStorage:
         """serializes __objects to the JSON file (path: __file_path)"""
         json_objects = {}
         for key in self.__objects:
-           json_objects[key] = self.__objects[key].to_dict()
+            json_objects[key] = self.__objects[key].to_dict()
         json_objects.update(self.__objects)
         for key, val in json_objects.items():
             json_objects[key] = val.to_dict()
@@ -58,7 +58,7 @@ class FileStorage:
                 jo = json.load(f)
             for key in jo:
                 self.__objects[key] = classes[jo[key]["__class__"]](**jo[key])
-        except:
+        except FileNotFoundError:
             pass
 
     def delete(self, obj=None):
