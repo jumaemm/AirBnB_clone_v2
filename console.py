@@ -127,6 +127,7 @@ class HBNBCommand(cmd.Cmd):
                     continue
                 key, value = params.split("=")
                 value = eval(value)
+                print("This is the value: {}").format(value)
                 if type(value) not in {int, float, str}:
                     continue
                 if type(value) == str:
